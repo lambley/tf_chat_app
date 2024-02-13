@@ -22,7 +22,7 @@ const ChatWindow = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-4 border rounded-lg shadow-md">
+    <div className="max-w-md w-auto mx-auto mt-10 p-4 border rounded-lg shadow-md">
       {/* Message Display Area */}
       <div className="h-48 border-b mb-4 overflow-y-auto">
         {messages.map((message, index) => (

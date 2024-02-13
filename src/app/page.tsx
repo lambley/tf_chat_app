@@ -24,7 +24,7 @@ export default function Home() {
         onLoad={() => console.log("QnA script loaded")}
       ></Script>
       <h1 className="text-5xl font-bold">Ask a Question</h1>
-      {chatWindow()}
+      <div className="w-3/4">{chatWindow()}</div>
       <p className="h-24">
         {scriptLoaded && "TensorFlow.js scripts have loaded!"}
       </p>
