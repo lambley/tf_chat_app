@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import chatWindow from "@/components/chatWindow";
 
 export default function Home() {
   const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -22,7 +23,8 @@ export default function Home() {
         strategy="beforeInteractive"
         onLoad={() => console.log("QnA script loaded")}
       ></Script>
-      <h1 className="text-5xl font-bold">Hello World</h1>
+      <h1 className="text-5xl font-bold">Ask a Question</h1>
+      {chatWindow()}
       {scriptLoaded && <p>TensorFlow.js scripts have loaded!</p>}
     </main>
   );
