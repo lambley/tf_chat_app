@@ -30,7 +30,7 @@ const ChatWindow = () => {
             key={index}
             className={`p-2 ${
               message.sender === "user" ? "bg-blue-100" : "bg-gray-100"
-            } rounded-lg my-1`}
+            } rounded-lg my-1 text-black`}
           >
             {message.text}
           </div>
