@@ -2,7 +2,7 @@
 
 import Script from "next/script";
 import { useEffect, useState } from "react";
-import chatWindow from "@/components/chatWindow";
+import ChatWindow from "@/components/ChatWindow";
 
 export default function Home() {
   const [scriptLoaded, setScriptLoaded] = useState(false);
