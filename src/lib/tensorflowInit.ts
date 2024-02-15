@@ -3,18 +3,33 @@ import "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-cpu";
 import "@tensorflow/tfjs-backend-webgl";
 
-class QnaModel {
-  private model: qna.QuestionAndAnswer | null;
+let cachedModel: qna.QuestionAndAnswer | null = null;
 
-  constructor() {
-    this.model = null;
+class QnaModel {
+  private static instance: QnaModel | null = null;
+  private model: qna.QuestionAndAnswer | null = null;
+
+  constructor() {}
+
+  static getInstance() {
+    if (!QnaModel.instance) {
+      QnaModel.instance = new QnaModel();
+    }
+    return QnaModel.instance;
   }
 
   async initialize(onLoadCallback: () => void) {
     try {
-      this.model = await qna.load();
-      console.log("Q&A model initialized successfully!");
-      onLoadCallback();
+      if (!this.model) {
+        // Check if the model is not already initialized
+        this.model = cachedModel || (await qna.load());
+        cachedModel = this.model; // Cache the initialized model
+        console.log("Q&A model initialized successfully!");
+        onLoadCallback();
+      } else {
+        console.log("Q&A model is already initialized. Reusing existing model.");
+        onLoadCallback();
+      }
     } catch (error) {
       console.error("Error initializing Q&A model:", error);
     }
