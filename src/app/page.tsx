@@ -13,15 +13,22 @@ export default function Home() {
   useEffect(() => {
     const model = new QnaModel();
     model.initialize(() => {
-    setScriptLoaded(true);
+      setScriptLoaded(true);
     });
   }, []);
+
+  const renderScriptLoadingMessage = () => {
+    const message = scriptLoaded ? loadedText : loadingText;
+    const messageClass = scriptLoaded ? "text-green-500" : "text-red-500";
+
+    return <p className={"h-24 " + messageClass}>{message}</p>;
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h1 className="text-5xl font-bold">Ask a Question</h1>
       <div className="w-3/4">{ChatWindow()}</div>
-      <p className="h-24">{scriptLoaded ? loadedText : loadingText}</p>
+      {renderScriptLoadingMessage()}
     </main>
   );
 }
