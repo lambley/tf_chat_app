@@ -21,9 +21,8 @@ class QnaModel {
   async initialize(onLoadCallback: () => void) {
     try {
       if (!this.model) {
-        // Check if the model is not already initialized
         this.model = cachedModel || (await qna.load());
-        cachedModel = this.model; // Cache the initialized model
+        cachedModel = this.model; 
         console.log("Q&A model initialized successfully!");
         onLoadCallback();
       } else {
