@@ -4,6 +4,7 @@ type Message = {
   text: string;
   sender: "user" | "bot";
   isContext?: boolean;
+  timestamp: string;
 };
 
 const ChatWindow = () => {
@@ -13,6 +14,13 @@ const ChatWindow = () => {
   const [currentStep, setCurrentStep] = useState<"context" | "question">(
     "context"
   );
+
+  const getTimeStamp = (): string => {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (currentStep === "context") {
@@ -24,15 +32,19 @@ const ChatWindow = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const timestamp = getTimeStamp();
     if (currentStep === "context" && inputContext.trim() !== "") {
       setMessages([
         ...messages,
-        { text: inputContext, sender: "user", isContext: true },
+        { text: inputContext, sender: "user", isContext: true, timestamp },
       ]);
       setInputContext("");
       setCurrentStep("question");
     } else if (currentStep === "question" && inputQuestion.trim() !== "") {
-      setMessages([...messages, { text: inputQuestion, sender: "user" }]);
+      setMessages([
+        ...messages,
+        { text: inputQuestion, sender: "user", timestamp },
+      ]);
       setInputQuestion("");
     }
   };
@@ -53,13 +65,22 @@ const ChatWindow = () => {
             className={`p-2 ${
               message.sender === "user"
                 ? message.isContext
-                  ? "bg-blue-500"
-                  : "bg-blue-100"
+                  ? "bg-orange-500"
+                  : "bg-blue-500"
                 : "bg-gray-100"
             } rounded-lg my-1 text-black`}
           >
-            {message.isContext && <span className="font-bold">Context: </span>}
-            {message.text}
+            <div className="flex content-center justify-between">
+              <span>
+                {message.isContext && (
+                  <span className="font-bold">Context: </span>
+                )}
+                <span>{message.text}</span>
+              </span>
+              <span className="text-gray-100 text-sm">
+                {message.timestamp}{" "}
+              </span>
+            </div>
           </div>
         ))}
       </div>
