@@ -72,9 +72,9 @@ const ChatWindow = () => {
           >
             <div className="flex content-center justify-between">
               <span>
-                {message.isContext && (
-                  <span className="font-bold">Context: </span>
-                )}
+                <span className="font-bold">
+                  {message.isContext ? "Context: " : "Question: "}
+                </span>
                 <span>{message.text}</span>
               </span>
               <span className="text-gray-100 text-sm">
