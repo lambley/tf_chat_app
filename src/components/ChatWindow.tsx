@@ -68,7 +68,7 @@ const ChatWindow = () => {
                   ? "bg-orange-500"
                   : "bg-blue-500"
                 : "bg-gray-100"
-            } rounded-lg my-1 text-black`}
+            } rounded-lg my-1 text-black w-1/2 ml-auto`}
           >
             <div className="flex content-center justify-between">
               <span>
