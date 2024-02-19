@@ -55,6 +55,13 @@ const ChatWindow = () => {
     setCurrentStep("context");
   };
 
+  const handleCtrlEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleSubmit(e as unknown as FormEvent<HTMLFormElement>);
+    }
+  };
+
   return (
     <div className="max-w-md w-auto mx-auto mt-10 p-4 border rounded-lg shadow-md">
       {/* Message Display Area */}
@@ -91,6 +98,7 @@ const ChatWindow = () => {
           <textarea
             value={inputContext}
             onChange={handleInputChange}
+            onKeyDown={handleCtrlEnter}
             placeholder="Type your context..."
             className="flex-1 p-2 border rounded-tl-md rounded-tr-md focus:outline-none focus:ring focus:border-blue-300 text-black resize-none"
           />
@@ -99,6 +107,7 @@ const ChatWindow = () => {
           <textarea
             value={inputQuestion}
             onChange={handleInputChange}
+            onKeyDown={handleCtrlEnter}
             placeholder="Type your question..."
             className="flex-1 p-2 border rounded-tl-md rounded-tr-md focus:outline-none focus:ring focus:border-blue-300 text-black resize-none"
           />
