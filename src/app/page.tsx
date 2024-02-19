@@ -6,21 +6,25 @@ import QnaModel from "@/lib/tensorflowInit";
 import { Answers } from "@/types";
 
 export default function Home() {
-  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [tfInstance, setTfInstance] = useState<QnaModel>(null);
+
+  const modelIsready = tfInstance !== null;
 
   const loadingText = "Loading TensorFlow.js scripts...";
   const loadedText = "TensorFlow.js scripts have loaded!";
 
   useEffect(() => {
+    async function initializeModel() {
     const model = new QnaModel();
-    model.initialize(() => {
-      setScriptLoaded(true);
-    });
+      await model.initialize(() => setTfInstance(model));
+    }
+
+    initializeModel();
   }, []);
 
   const renderScriptLoadingMessage = () => {
-    const message = scriptLoaded ? loadedText : loadingText;
-    const messageClass = scriptLoaded ? "text-green-500" : "text-red-500";
+    const message = tfInstance ? loadedText : loadingText;
+    const messageClass = tfInstance ? "text-green-500" : "text-red-500";
 
     return <p className={"h-24 " + messageClass}>{message}</p>;
   };
