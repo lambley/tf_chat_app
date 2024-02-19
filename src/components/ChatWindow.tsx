@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, ChangeEvent } from "react";
+import { Answers } from "@/types";
 
 type Message = {
   text: string;

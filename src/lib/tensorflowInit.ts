@@ -2,6 +2,7 @@ import * as qna from "@tensorflow-models/qna";
 import "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-cpu";
 import "@tensorflow/tfjs-backend-webgl";
+import { Answers } from "@/types";
 
 let cachedModel: qna.QuestionAndAnswer | null = null;
 

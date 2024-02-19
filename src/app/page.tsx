@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import ChatWindow from "@/components/ChatWindow";
 import QnaModel from "@/lib/tensorflowInit";
+import { Answers } from "@/types";
 
 export default function Home() {
   const [scriptLoaded, setScriptLoaded] = useState(false);
