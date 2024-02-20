@@ -21,6 +21,17 @@ const ChatWindow = ({ onAskQuestion, modelIsready }: ChatWindowProps) => {
   const [currentStep, setCurrentStep] = useState<
     "context" | "question" | "request answers"
   >("context");
+
+  // initial message to user
+  useEffect(() => {
+    const initialMessage: Message = {
+      text: "Please provide some context for your question.",
+      sender: "bot",
+      timestamp: getTimeStamp(),
+    };
+    setMessages([initialMessage]);
+  }, []);
+
   const onAskQuestionHandler = async () => {
     const question = inputQuestion;
     const context = inputContext;
