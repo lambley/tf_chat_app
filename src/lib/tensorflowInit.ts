@@ -27,7 +27,9 @@ class QnaModel {
         console.log("Q&A model initialized successfully!");
         onLoadCallback();
       } else {
-        console.log("Q&A model is already initialized. Reusing existing model.");
+        console.log(
+          "Q&A model is already initialized. Reusing existing model."
+        );
         onLoadCallback();
       }
     } catch (error) {
@@ -35,20 +37,32 @@ class QnaModel {
     }
   }
 
-  async askQuestion(question: string, context: string) {
+  async askQuestion(question: string, context: string): Promise<Answers[]> {
     if (!this.model) {
       console.error("Q&A model not initialized. Call initialize() first.");
-      return null;
+      return [
+        {
+          text: "Error: Q&A model not initialized. Call initialize() first.",
+          startIndex: 0,
+          endIndex: 0,
+          score: 0,
+        },
+      ];
     }
 
     try {
       const answers = await this.model.findAnswers(question, context);
-      console.log("Question:", question);
-      console.log("Answers:", answers);
       return answers;
     } catch (error) {
       console.error("Error asking question:", error);
-      return null;
+      return [
+        {
+          text: "Error: Unable to find answers. Please try again.",
+          startIndex: 0,
+          endIndex: 0,
+          score: 0,
+        },
+      ];
     }
   }
 }
