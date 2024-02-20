@@ -1,3 +1,4 @@
+import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { Answers } from "@/types";
 
 type Message = {
@@ -7,13 +8,44 @@ type Message = {
   timestamp: string;
 };
 
-const ChatWindow = () => {
+type ChatWindowProps = {
+  onAskQuestion: (question: string, context: string) => Promise<Answers[]>;
+  modelIsready: boolean;
+};
+
+const ChatWindow = ({ onAskQuestion, modelIsready }: ChatWindowProps) => {
   const [inputContext, setInputContext] = useState("");
   const [inputQuestion, setInputQuestion] = useState("");
+  const [answers, setAnswers] = useState([] as Answers[]);
   const [messages, setMessages] = useState([] as Message[]);
-  const [currentStep, setCurrentStep] = useState<"context" | "question">(
-    "context"
-  );
+  const [currentStep, setCurrentStep] = useState<
+    "context" | "question" | "request answers"
+  >("context");
+  const onAskQuestionHandler = async () => {
+    const question = inputQuestion;
+    const context = inputContext;
+    const answers = await onAskQuestion(question, context);
+
+    setAnswers(answers);
+    setInputQuestion("");
+
+    console.log("Answers:", answers);
+
+    addBotMessages(answers);
+
+    setCurrentStep("request answers");
+  };
+
+  const addBotMessages = (answers: Answers[]) => {
+    answers.forEach((answer) => {
+      const message: Message = {
+        text: answer.text,
+        sender: "bot",
+        timestamp: getTimeStamp(),
+      };
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+  };
 
   const getTimeStamp = (): string => {
     const now = new Date();
@@ -38,14 +70,13 @@ const ChatWindow = () => {
         ...messages,
         { text: inputContext, sender: "user", isContext: true, timestamp },
       ]);
-      setInputContext("");
       setCurrentStep("question");
     } else if (currentStep === "question" && inputQuestion.trim() !== "") {
       setMessages([
         ...messages,
         { text: inputQuestion, sender: "user", timestamp },
       ]);
-      setInputQuestion("");
+      onAskQuestionHandler();
     }
   };
 
@@ -63,9 +94,9 @@ const ChatWindow = () => {
   };
 
   return (
-    <div className="max-w-md w-auto mx-auto mt-10 p-4 border rounded-lg shadow-md">
+    <div className="w-full mx-auto p-4 border rounded-lg shadow-md">
       {/* Message Display Area */}
-      <div className="h-48 border-b mb-4 overflow-y-auto">
+      <div className="h-96 max-h-96 border-b mb-4 overflow-y-auto">
         {messages.map((message, index) => (
           <div
             key={index}
@@ -75,12 +106,19 @@ const ChatWindow = () => {
                   ? "bg-orange-500"
                   : "bg-blue-500"
                 : "bg-gray-100"
-            } rounded-lg my-1 text-black w-1/2 ml-auto`}
+            } rounded-lg my-1 text-black w-1/3 ${
+              message.sender === "user" ? "ml-auto" : "mr-auto"
+            }`}
           >
             <div className="flex content-center justify-between">
               <span>
                 <span className="font-bold">
-                  {message.isContext ? "Context: " : "Question: "}
+                  {
+                    {
+                      user: "You: ",
+                      bot: "Bot: ",
+                    }[message.sender]
+                  }
                 </span>
                 <span>{message.text}</span>
               </span>
@@ -101,15 +139,21 @@ const ChatWindow = () => {
             onKeyDown={handleCtrlEnter}
             placeholder="Type your context..."
             className="flex-1 p-2 border rounded-tl-md rounded-tr-md focus:outline-none focus:ring focus:border-blue-300 text-black resize-none"
+            disabled={!modelIsready}
           />
         )}
-        {currentStep === "question" && (
+        {(currentStep === "question" || currentStep === "request answers") && (
           <textarea
             value={inputQuestion}
             onChange={handleInputChange}
             onKeyDown={handleCtrlEnter}
-            placeholder="Type your question..."
+            placeholder={
+              currentStep === "request answers"
+                ? "Ask another question..."
+                : "Type your question..."
+            }
             className="flex-1 p-2 border rounded-tl-md rounded-tr-md focus:outline-none focus:ring focus:border-blue-300 text-black resize-none"
+            disabled={!modelIsready}
           />
         )}
         <button
@@ -118,7 +162,7 @@ const ChatWindow = () => {
         >
           {currentStep === "context" ? "Submit Context" : "Submit Question"}
         </button>
-        {currentStep === "question" && (
+        {currentStep === "request answers" && (
           <button
             type="button"
             onClick={handleNewContext}
