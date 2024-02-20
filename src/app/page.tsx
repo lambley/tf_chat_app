@@ -22,11 +22,48 @@ export default function Home() {
     initializeModel();
   }, []);
 
+  useEffect(() => {
+    const askQuestion = async () => {
+      const question = "What is the capital of France?";
+      const context = "The capital of France is Paris.";
+      const answers = await tfInstance.askQuestion(question, context);
+      console.log("Answers (hard-coded question):", answers);
+    };
+
+    if (tfInstance) {
+      askQuestion();
+    }
+  }, [tfInstance]);
+
   const renderScriptLoadingMessage = () => {
     const message = tfInstance ? loadedText : loadingText;
     const messageClass = tfInstance ? "text-green-500" : "text-red-500";
 
     return <p className={"h-24 " + messageClass}>{message}</p>;
+  };
+
+  const handleOnAskQuestion = async (
+    question: string,
+    context: string
+  ): Promise<Answers[]> => {
+    if (tfInstance) {
+      console.log("Asking question:", question, "with context:", context);
+      const answers = await tfInstance.askQuestion(question, context);
+      console.log("Answers:", answers);
+      return answers;
+    } else {
+      console.error(
+        "TensorFlow.js model not initialized. Unable to ask question."
+      );
+      return [
+        {
+          text: "Error: Q&A model not initialized.",
+          startIndex: 0,
+          endIndex: 0,
+          score: 0,
+        },
+      ];
+    }
   };
 
   return (
