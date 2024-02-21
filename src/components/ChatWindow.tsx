@@ -117,7 +117,7 @@ const ChatWindow = ({ onAskQuestion, modelIsready }: ChatWindowProps) => {
                   ? "bg-orange-500"
                   : "bg-blue-500"
                 : "bg-gray-100"
-            } rounded-lg my-1 text-black w-1/3 ${
+            } rounded-lg my-1 text-black w-3/5 ${
               message.sender === "user" ? "ml-auto" : "mr-auto"
             }`}
           >
