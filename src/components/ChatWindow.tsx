@@ -151,6 +151,7 @@ const ChatWindow = ({ onAskQuestion, modelIsready }: ChatWindowProps) => {
             placeholder="Type your context..."
             className="flex-1 p-2 border rounded-tl-md rounded-tr-md focus:outline-none focus:ring focus:border-blue-300 text-black resize-none"
             disabled={!modelIsready}
+            autoFocus={!modelIsready}
           />
         )}
         {(currentStep === "question" || currentStep === "request answers") && (
@@ -165,6 +166,7 @@ const ChatWindow = ({ onAskQuestion, modelIsready }: ChatWindowProps) => {
             }
             className="flex-1 p-2 border rounded-tl-md rounded-tr-md focus:outline-none focus:ring focus:border-blue-300 text-black resize-none"
             disabled={!modelIsready}
+            autoFocus={!modelIsready}
           />
         )}
         <button
