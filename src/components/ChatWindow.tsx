@@ -10,10 +10,10 @@ type Message = {
 
 type ChatWindowProps = {
   onAskQuestion: (question: string, context: string) => Promise<Answers[]>;
-  modelIsready: boolean;
+  modelIsReady: boolean;
 };
 
-const ChatWindow = ({ onAskQuestion, modelIsready }: ChatWindowProps) => {
+const ChatWindow = ({ onAskQuestion, modelIsReady }: ChatWindowProps) => {
   const [inputContext, setInputContext] = useState("");
   const [inputQuestion, setInputQuestion] = useState("");
   const [answers, setAnswers] = useState([] as Answers[]);
@@ -150,8 +150,8 @@ const ChatWindow = ({ onAskQuestion, modelIsready }: ChatWindowProps) => {
             onKeyDown={handleCtrlEnter}
             placeholder="Type your context..."
             className="flex-1 p-2 border rounded-tl-md rounded-tr-md focus:outline-none focus:ring focus:border-blue-300 text-black resize-none"
-            disabled={!modelIsready}
-            autoFocus={!modelIsready}
+            disabled={!modelIsReady}
+            autoFocus={modelIsReady}
           />
         )}
         {(currentStep === "question" || currentStep === "request answers") && (
@@ -165,8 +165,8 @@ const ChatWindow = ({ onAskQuestion, modelIsready }: ChatWindowProps) => {
                 : "Type your question..."
             }
             className="flex-1 p-2 border rounded-tl-md rounded-tr-md focus:outline-none focus:ring focus:border-blue-300 text-black resize-none"
-            disabled={!modelIsready}
-            autoFocus={!modelIsready}
+            disabled={!modelIsReady}
+            autoFocus={modelIsReady}
           />
         )}
         <button

@@ -8,7 +8,7 @@ import { Answers } from "@/types";
 export default function Home() {
   const [tfInstance, setTfInstance] = useState<QnaModel>(null);
 
-  const modelIsready = tfInstance !== null;
+  const modelIsReady = tfInstance !== null;
 
   const loadingText = "Loading TensorFlow.js scripts...";
   const loadedText = "TensorFlow.js scripts have loaded!";
@@ -72,7 +72,7 @@ export default function Home() {
       <div className="max-w-lg w-full">
         <ChatWindow
           onAskQuestion={handleOnAskQuestion}
-          modelIsready={modelIsready}
+          modelIsReady={modelIsReady}
         />
       </div>
       {renderScriptLoadingMessage()}
