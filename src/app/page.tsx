@@ -6,9 +6,9 @@ import QnaModel from "@/lib/tensorflowInit";
 import { Answers } from "@/types";
 
 export default function Home() {
-  const [tfInstance, setTfInstance] = useState<QnaModel>(null);
+  const [tfInstance, setTfInstance] = useState<QnaModel>();
 
-  const modelIsReady = tfInstance !== null;
+  const modelIsReady = tfInstance !== undefined;
 
   const loadingText = "Loading TensorFlow.js scripts...";
   const loadedText = "TensorFlow.js scripts have loaded!";
@@ -26,7 +26,7 @@ export default function Home() {
     const askQuestion = async () => {
       const question = "What is the capital of France?";
       const context = "The capital of France is Paris.";
-      const answers = await tfInstance.askQuestion(question, context);
+      const answers = await tfInstance?.askQuestion(question, context);
       console.log("Answers (hard-coded question):", answers);
     };
 
