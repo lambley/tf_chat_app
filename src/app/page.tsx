@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChatWindow from "@/components/ChatWindow";
 import QnaModel from "@/lib/tensorflowInit";
 import { Answers } from "@/types";
