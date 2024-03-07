@@ -42,20 +42,20 @@ const ChatWindow = ({ onAskQuestion, modelIsReady }: ChatWindowProps) => {
 
     console.log("Answers:", answers);
 
-    addBotMessages(answers);
+    addBotMessage(answers);
 
     setCurrentStep("request answers");
   };
 
-  const addBotMessages = (answers: Answers[]) => {
-    answers.forEach((answer) => {
-      const message: Message = {
-        text: answer.text,
-        sender: "bot",
-        timestamp: getTimeStamp(),
-      };
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
+  const addBotMessage = (answers: Answers[]): void => {
+    // randomly select an answer and add it to the messages
+    const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
+    const botMessage: Message = {
+      text: randomAnswer.text,
+      sender: "bot",
+      timestamp: getTimeStamp(),
+    };
+    setMessages([...messages, botMessage]);
   };
 
   const getTimeStamp = (): string => {
