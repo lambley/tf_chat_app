@@ -55,7 +55,7 @@ const ChatWindow = ({ onAskQuestion, modelIsReady }: ChatWindowProps) => {
       sender: "bot",
       timestamp: getTimeStamp(),
     };
-    setMessages([...messages, botMessage]);
+    setMessages((prevMessages) => [...prevMessages, botMessage]);
   };
 
   const getTimeStamp = (): string => {
