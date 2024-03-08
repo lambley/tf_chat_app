@@ -1,114 +1,15 @@
-import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
-import { Answers } from "@/types";
+import React from "react";
+import useChatWindow from "@/hooks/useChatWindow";
+import { ChatWindowProps } from "@/types";
 
-type Message = {
-  text: string;
-  sender: "user" | "bot";
-  isContext?: boolean;
-  timestamp: string;
-};
-
-type ChatWindowProps = {
-  onAskQuestion: (question: string, context: string) => Promise<Answers[]>;
-  modelIsReady: boolean;
-};
-
-const ChatWindow = ({ onAskQuestion, modelIsReady }: ChatWindowProps) => {
-  const [inputContext, setInputContext] = useState("");
-  const [inputQuestion, setInputQuestion] = useState("");
-  const [answers, setAnswers] = useState([] as Answers[]);
-  const [messages, setMessages] = useState([] as Message[]);
-  const [currentStep, setCurrentStep] = useState<
-    "context" | "question" | "request answers"
-  >("context");
-
-  // initial message to user
-  useEffect(() => {
-    const initialMessage: Message = {
-      text: "Please provide some context for your question.",
-      sender: "bot",
-      timestamp: getTimeStamp(),
-    };
-    setMessages([initialMessage]);
-  }, []);
-
-  const onAskQuestionHandler = async () => {
-    const question = inputQuestion;
-    const context = inputContext;
-    const answers = await onAskQuestion(question, context);
-
-    setAnswers(answers);
-    setInputQuestion("");
-
-    console.log("Answers:", answers);
-
-    addBotMessage(answers);
-
-    setCurrentStep("request answers");
-  };
-
-  const addBotMessage = (answers: Answers[]): void => {
-    // randomly select an answer and add it to the messages
-    const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
-    const botMessage: Message = {
-      text: randomAnswer.text,
-      sender: "bot",
-      timestamp: getTimeStamp(),
-    };
-    setMessages((prevMessages) => [...prevMessages, botMessage]);
-  };
-
-  const getTimeStamp = (): string => {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, "0");
-    const minutes = now.getMinutes().toString().padStart(2, "0");
-    return `${hours}:${minutes}`;
-  };
-
-  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    if (currentStep === "context") {
-      setInputContext(e.target.value);
-    } else {
-      setInputQuestion(e.target.value);
-    }
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const timestamp = getTimeStamp();
-    if (currentStep === "context" && inputContext.trim() !== "") {
-      setMessages([
-        ...messages,
-        { text: inputContext, sender: "user", isContext: true, timestamp },
-      ]);
-      setCurrentStep("question");
-    } else if (currentStep === "question" && inputQuestion.trim() !== "") {
-      setMessages([
-        ...messages,
-        { text: inputQuestion, sender: "user", timestamp },
-      ]);
-      onAskQuestionHandler();
-    }
-  };
-
-  const handleNewContext = () => {
-    setInputContext("");
-    setInputQuestion("");
-    setCurrentStep("context");
-  };
-
-  const handleCtrlEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      handleSubmit(e as unknown as FormEvent<HTMLFormElement>);
-    }
-  };
+const ChatWindow = (props: ChatWindowProps) => {
+  const chatWindowProps = useChatWindow(props);
 
   return (
     <div className="w-full mx-auto p-4 border rounded-lg shadow-md">
       {/* Message Display Area */}
       <div className="h-96 max-h-96 border-b mb-4 overflow-y-auto">
-        {messages.map((message, index) => (
+        {chatWindowProps.messages.map((message, index) => (
           <div
             key={index}
             className={`p-2 ${
@@ -142,43 +43,43 @@ const ChatWindow = ({ onAskQuestion, modelIsReady }: ChatWindowProps) => {
       </div>
 
       {/* Message Input and Submit Button */}
-      <form onSubmit={handleSubmit} className="flex flex-col">
-        {currentStep === "context" && (
+      <form onSubmit={chatWindowProps.handleSubmit} className="flex flex-col">
+        {chatWindowProps.currentStep === "context" && (
           <textarea
-            value={inputContext}
-            onChange={handleInputChange}
-            onKeyDown={handleCtrlEnter}
+            value={chatWindowProps.inputContext}
+            onChange={chatWindowProps.handleInputChange}
+            onKeyDown={chatWindowProps.handleCtrlEnter}
             placeholder="Type your context..."
             className="flex-1 p-2 border rounded-tl-md rounded-tr-md focus:outline-none focus:ring focus:border-blue-300 text-black resize-none"
-            disabled={!modelIsReady}
-            autoFocus={modelIsReady}
+            disabled={!chatWindowProps.modelIsReady}
+            autoFocus={chatWindowProps.modelIsReady}
           />
         )}
-        {(currentStep === "question" || currentStep === "request answers") && (
+        {(chatWindowProps.currentStep === "question" || chatWindowProps.currentStep === "request answers") && (
           <textarea
-            value={inputQuestion}
-            onChange={handleInputChange}
-            onKeyDown={handleCtrlEnter}
+            value={chatWindowProps.inputQuestion}
+            onChange={chatWindowProps.handleInputChange}
+            onKeyDown={chatWindowProps.handleCtrlEnter}
             placeholder={
-              currentStep === "request answers"
+              chatWindowProps.currentStep === "request answers"
                 ? "Ask another question..."
                 : "Type your question..."
             }
             className="flex-1 p-2 border rounded-tl-md rounded-tr-md focus:outline-none focus:ring focus:border-blue-300 text-black resize-none"
-            disabled={!modelIsReady}
-            autoFocus={modelIsReady}
+            disabled={!chatWindowProps.modelIsReady}
+            autoFocus={chatWindowProps.modelIsReady}
           />
         )}
         <button
           type="submit"
           className="mt-1 px-4 py-2 bg-blue-500 text-white rounded-br-md rounded-bl-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
         >
-          {currentStep === "context" ? "Submit Context" : "Submit Question"}
+          {chatWindowProps.currentStep === "context" ? "Submit Context" : "Submit Question"}
         </button>
-        {currentStep === "request answers" && (
+        {chatWindowProps.currentStep === "request answers" && (
           <button
             type="button"
-            onClick={handleNewContext}
+            onClick={chatWindowProps.handleNewContext}
             className="mt-1 px-4 py-2 bg-gray-500 text-white rounded-br-md rounded-bl-md hover:bg-gray-600 focus:outline-none focus:ring focus:border-gray-300"
           >
             New Context
