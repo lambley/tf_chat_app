@@ -34,7 +34,11 @@ const ChatWindow = (props: ChatWindowProps) => {
                 </span>
                 <span>{message.text}</span>
               </span>
-              <span className="text-gray-100 text-sm">
+              <span
+                className={`text-${
+                  message.sender === "user" ? "gray" : "black"
+                } text-sm`}
+              >
                 {message.timestamp}{" "}
               </span>
             </div>
@@ -55,7 +59,8 @@ const ChatWindow = (props: ChatWindowProps) => {
             autoFocus={chatWindowProps.modelIsReady}
           />
         )}
-        {(chatWindowProps.currentStep === "question" || chatWindowProps.currentStep === "request answers") && (
+        {(chatWindowProps.currentStep === "question" ||
+          chatWindowProps.currentStep === "request answers") && (
           <textarea
             value={chatWindowProps.inputQuestion}
             onChange={chatWindowProps.handleInputChange}
@@ -74,7 +79,9 @@ const ChatWindow = (props: ChatWindowProps) => {
           type="submit"
           className="mt-1 px-4 py-2 bg-blue-500 text-white rounded-br-md rounded-bl-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
         >
-          {chatWindowProps.currentStep === "context" ? "Submit Context" : "Submit Question"}
+          {chatWindowProps.currentStep === "context"
+            ? "Submit Context"
+            : "Submit Question"}
         </button>
         {chatWindowProps.currentStep === "request answers" && (
           <button
