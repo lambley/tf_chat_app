@@ -40,11 +40,20 @@ export const useChatWindow = ({
 
   const addBotMessage = (answers: Answers[]): void => {
     const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
-    const botMessage: Message = {
-      text: randomAnswer.text,
-      sender: "bot",
-      timestamp: getTimeStamp(),
-    };
+    let botMessage: Message;
+    if (!randomAnswer) {
+      botMessage = {
+        text: "Sorry, I couldn't find an answer to your question.",
+        sender: "bot",
+        timestamp: getTimeStamp(),
+      };
+    } else {
+      botMessage = {
+        text: randomAnswer.text,
+        sender: "bot",
+        timestamp: getTimeStamp(),
+      };
+    }
     setMessages((prevMessages) => [...prevMessages, botMessage]);
   };
 
@@ -72,7 +81,10 @@ export const useChatWindow = ({
         { text: inputContext, sender: "user", isContext: true, timestamp },
       ]);
       setCurrentStep("question");
-    } else if (currentStep === "question" && inputQuestion.trim() !== "") {
+    } else if (
+      (currentStep === "question" || currentStep === "request answers") &&
+      inputQuestion.trim() !== ""
+    ) {
       setMessages([
         ...messages,
         { text: inputQuestion, sender: "user", timestamp },
