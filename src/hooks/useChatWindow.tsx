@@ -2,7 +2,7 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Answers, Message, UseChatWindowProps } from "@/types";
 
-export const useChatWindow = ({
+const useChatWindow = ({
   onAskQuestion,
   modelIsReady,
 }: UseChatWindowProps) => {

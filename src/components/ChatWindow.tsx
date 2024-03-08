@@ -1,8 +1,8 @@
 import React from "react";
 import useChatWindow from "@/hooks/useChatWindow";
-import { ChatWindowProps } from "@/types";
+import { UseChatWindowProps } from "@/types";
 
-const ChatWindow = (props: ChatWindowProps) => {
+const ChatWindow = (props: UseChatWindowProps) => {
   const chatWindowProps = useChatWindow(props);
 
   return (
