@@ -3,6 +3,7 @@ import "@tensorflow/tfjs-core";
 import "@tensorflow/tfjs-backend-cpu";
 import "@tensorflow/tfjs-backend-webgl";
 import { Answers } from "@/types";
+import { createErrorAnswer } from "./answerUtils";
 
 let cachedModel: qna.QuestionAndAnswer | null = null;
 
@@ -23,7 +24,7 @@ class QnaModel {
     try {
       if (!this.model) {
         this.model = cachedModel || (await qna.load());
-        cachedModel = this.model; 
+        cachedModel = this.model;
         console.log("Q&A model initialized successfully!");
         onLoadCallback();
       } else {
@@ -41,12 +42,9 @@ class QnaModel {
     if (!this.model) {
       console.error("Q&A model not initialized. Call initialize() first.");
       return [
-        {
-          text: "Error: Q&A model not initialized. Call initialize() first.",
-          startIndex: 0,
-          endIndex: 0,
-          score: 0,
-        },
+        createErrorAnswer(
+          "Q&A model not initialized. Call initialize() first."
+        ),
       ];
     }
 
@@ -56,12 +54,7 @@ class QnaModel {
     } catch (error) {
       console.error("Error asking question:", error);
       return [
-        {
-          text: "Error: Unable to find answers. Please try again.",
-          startIndex: 0,
-          endIndex: 0,
-          score: 0,
-        },
+        createErrorAnswer(`Error asking question: ${error || "Unknown error"}`),
       ];
     }
   }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import ChatWindow from "@/components/ChatWindow";
 import QnaModel from "@/lib/tensorflowInit";
 import { Answers } from "@/types";
+import { createErrorAnswer } from "@/lib/answerUtils";
 
 export default function Home() {
   const [tfInstance, setTfInstance] = useState<QnaModel>();
@@ -15,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     async function initializeModel() {
-    const model = new QnaModel();
+      const model = new QnaModel();
       await model.initialize(() => setTfInstance(model));
     }
 
@@ -56,12 +57,9 @@ export default function Home() {
         "TensorFlow.js model not initialized. Unable to ask question."
       );
       return [
-        {
-          text: "Error: Q&A model not initialized.",
-          startIndex: 0,
-          endIndex: 0,
-          score: 0,
-        },
+        createErrorAnswer(
+          "TensorFlow.js model not initialized. Unable to ask question."
+        ),
       ];
     }
   };
