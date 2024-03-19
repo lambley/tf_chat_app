@@ -5,14 +5,10 @@ import "@testing-library/jest-dom/extend-expect";
 
 describe("RootLayout", () => {
   it("renders children", () => {
-    const text = "Hello, World!";
+    const text: React.ReactNode = <div>Hello World!</div>;
 
-    const { getByText } = render(
-      <RootLayout>
-        <div>{text}</div>
-      </RootLayout>
-    );
+    const { getByText } = render(<RootLayout>{text}</RootLayout>);
 
-    expect(getByText(text)).toBeInTheDocument();
+    expect(getByText("Hello World!")).toBeInTheDocument();
   });
 });
