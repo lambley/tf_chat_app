@@ -5,17 +5,14 @@ import "@testing-library/jest-dom/extend-expect";
 
 describe("RootLayout", () => {
   it("renders children", () => {
-    const metadata = {
-      title: "Test Title",
-      description: "Test Description",
-    };
+    const text = "Hello, World!";
 
     const { getByText } = render(
-      <RootLayout metadata={metadata}>
-        <div>Test Content</div>
+      <RootLayout>
+        <div>{text}</div>
       </RootLayout>
     );
 
-    expect(getByText("Test Content")).toBeInTheDocument();
+    expect(getByText(text)).toBeInTheDocument();
   });
 });
