@@ -69,6 +69,7 @@ export default function Home() {
       <h1 className="text-5xl font-bold">Ask a Question</h1>
       <div className="max-w-lg w-full">
         <ChatWindow
+          id="chat-window"
           onAskQuestion={handleOnAskQuestion}
           modelIsReady={modelIsReady}
         />
