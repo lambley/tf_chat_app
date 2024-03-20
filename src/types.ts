@@ -13,6 +13,7 @@ type Message = {
 };
 
 type UseChatWindowProps = {
+  id: string;
   onAskQuestion: (question: string, context: string) => Promise<Answers[]>;
   modelIsReady: boolean;
 };

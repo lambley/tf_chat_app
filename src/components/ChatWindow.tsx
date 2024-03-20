@@ -6,7 +6,10 @@ const ChatWindow = (props: UseChatWindowProps) => {
   const chatWindowProps = useChatWindow(props);
 
   return (
-    <div className="w-full mx-auto p-4 border rounded-lg shadow-md">
+    <div
+      id={props.id}
+      className="w-full mx-auto p-4 border rounded-lg shadow-md"
+    >
       {/* Message Display Area */}
       <div className="h-96 max-h-96 border-b mb-4 overflow-y-auto">
         {chatWindowProps.messages.map((message, index) => (
