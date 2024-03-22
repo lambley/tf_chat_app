@@ -1,6 +1,7 @@
 import exp from "constants";
 import QnaModel from "../tensorflowInit";
 import * as qna from "@tensorflow-models/qna";
+import { createErrorAnswer } from "../answerUtils";
 
 describe("QnaModel", () => {
   let qnaModel: QnaModel;
@@ -62,5 +63,49 @@ describe("QnaModel", () => {
     });
   });
 
-  describe("askQuestion", () => {});
+  describe("askQuestion", () => {
+    let qnaModel: QnaModel;
+
+    beforeEach(() => {
+      qnaModel = new QnaModel();
+    });
+
+    describe("when model is initialized", () => {
+      beforeEach(() => {
+        qnaModel['model'] = {
+          findAnswers: jest.fn().mockResolvedValue(['Answer'])
+        } as any;
+      });
+
+      it("should call findAnswers with the provided question and context", async () => {
+        const question = "What is the capital of France?";
+        const context = "The capital of France is Paris.";
+
+        await qnaModel.askQuestion(question, context);
+
+        expect(qnaModel['model']?.findAnswers).toHaveBeenCalledWith(question, context);
+      });
+
+      it("should return the answers provided by findAnswers", async () => {
+        const question = "What is the capital of France?";
+        const context = "The capital of France is Paris.";
+
+        const answers = await qnaModel.askQuestion(question, context);
+
+        expect(answers).toEqual(['Answer']);
+      });
+    });
+
+    describe("when model is not initialized", () => {
+      it("should return an error answer", async () => {
+        const question = "What is the capital of France?";
+        const context = "The capital of France is Paris.";
+
+        const answers = await qnaModel.askQuestion(question, context);
+
+        expect(answers).toEqual([createErrorAnswer('Q&A model not initialized. Call initialize() first.')]);
+      });
+    });
+  });
+
 });
