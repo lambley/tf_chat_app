@@ -1,11 +1,7 @@
-// src/hooks/useChatWindow.ts
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { Answers, Message, UseChatWindowProps } from "@/types";
 
-const useChatWindow = ({
-  onAskQuestion,
-  modelIsReady,
-}: UseChatWindowProps) => {
+const useChatWindow = ({ onAskQuestion, modelIsReady }: UseChatWindowProps) => {
   const [inputContext, setInputContext] = useState("");
   const [inputQuestion, setInputQuestion] = useState("");
   const [answers, setAnswers] = useState([] as Answers[]);
