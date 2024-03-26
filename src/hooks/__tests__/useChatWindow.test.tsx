@@ -10,7 +10,19 @@ describe("useChatWindow", () => {
     modelIsReady: true,
   };
 
-  describe("useEffect", () => {});
+  describe("useEffect", () => {
+    it("sets initial message when component mounts", () => {
+      const { result } = renderHook(() =>
+        useChatWindow({ ...testUseChatWindowProps })
+      );
+
+      expect(result.current.messages).toHaveLength(1);
+      expect(result.current.messages[0].text).toBe(
+        "Please provide some context for your question."
+      );
+      expect(result.current.messages[0].sender).toBe("bot");
+    });
+  });
 
   describe("onAskQuestionHandler", () => {});
 
