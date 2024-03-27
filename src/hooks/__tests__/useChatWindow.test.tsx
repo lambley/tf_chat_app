@@ -34,7 +34,21 @@ describe("useChatWindow", () => {
 
   describe("handleSubmit", () => {});
 
-  describe("handleNewContext", () => {});
+  describe("handleNewContext", () => {
+    it("resets the currentStep to 'context' and sets the inputContext and inputQuestion to an empty string", () => {
+      const { result } = renderHook(() =>
+        useChatWindow({ ...testUseChatWindowProps })
+      );
+
+      act(() => {
+        result.current.handleNewContext();
+      });
+
+      expect(result.current.currentStep).toBe("context");
+      expect(result.current.inputContext).toBe("");
+      expect(result.current.inputQuestion).toBe("");
+    });
+  });
 
   describe("handleCtrlEnter", () => {
     it("should prevent default and call handleSubmit when ctrl+enter is pressed", () => {
