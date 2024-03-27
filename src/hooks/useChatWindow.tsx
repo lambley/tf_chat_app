@@ -115,6 +115,8 @@ const useChatWindow = ({ onAskQuestion, modelIsReady }: UseChatWindowProps) => {
     currentStep,
     setCurrentStep,
     onAskQuestionHandler,
+    addBotMessage,
+    getTimeStamp,
     handleInputChange,
     handleSubmit,
     handleNewContext,

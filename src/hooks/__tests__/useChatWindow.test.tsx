@@ -28,7 +28,19 @@ describe("useChatWindow", () => {
 
   describe("addBotMessage", () => {});
 
-  describe("getTimeStamp", () => {});
+  describe("getTimeStamp", () => {
+    it("returns a string in the format 'HH:MM'", () => {
+      const { result } = renderHook(() =>
+        useChatWindow({ ...testUseChatWindowProps })
+      );
+
+      const timeStamp = result.current.getTimeStamp();
+      const [hours, minutes] = timeStamp.split(":");
+
+      expect(hours.length).toBe(2);
+      expect(minutes.length).toBe(2);
+    });
+  });
 
   describe("handleInputChange", () => {});
 
@@ -68,8 +80,7 @@ describe("useChatWindow", () => {
       });
 
       expect(e.preventDefault).toHaveBeenCalled();
-      // checked with log statement - handleSubmit is being called but can't get the spy to work
-      // expect(handleSubmitSpy).toHaveBeenCalled();
+      expect(handleSubmitSpy).toHaveBeenCalled();
     });
   });
 });
