@@ -3,6 +3,7 @@ import { renderHook, act } from "@testing-library/react-hooks";
 import useChatWindow from "../useChatWindow";
 import { UseChatWindowProps } from "@/types";
 import { testAnswer, testAnswerArray } from "@/lib/answerUtils";
+import { waitFor } from "@testing-library/react";
 
 describe("useChatWindow", () => {
   const testUseChatWindowProps: UseChatWindowProps = {
@@ -10,6 +11,10 @@ describe("useChatWindow", () => {
     onAskQuestion: jest.fn(),
     modelIsReady: true,
   };
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   describe("useEffect", () => {
     it("sets initial message when component mounts", () => {
@@ -27,10 +32,6 @@ describe("useChatWindow", () => {
 
   describe("onAskQuestionHandler", () => {
     it("sets question and context", () => {});
-
-    it("calls onAskQuestion with the question and context", () => {});
-
-    it("sets answers to the response from onAskQuestion and resets inputQuestion", () => {});
 
     it("calls addBotMessage with the answers", () => {});
 
