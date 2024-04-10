@@ -31,11 +31,11 @@ describe("useChatWindow", () => {
   });
 
   describe("onAskQuestionHandler", () => {
-    it("sets question and context", () => {});
+    xit("sets question and context", () => {});
 
-    it("calls addBotMessage with the answers", () => {});
+    xit("calls addBotMessage with the answers", () => {});
 
-    it("sets currentStep to 'request answers'", () => {});
+    xit("sets currentStep to 'request answers'", () => {});
   });
 
   describe("addBotMessage", () => {
